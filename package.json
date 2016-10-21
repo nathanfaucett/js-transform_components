@@ -1,0 +1,42 @@
+{
+  "name": "@nathanfaucett/transform_components",
+  "version": "0.0.1",
+  "description": "Class for the browser and node.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nathanfaucett/js-transform_components.git"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "test": "npm run test-node",
+    "test-node": "node ./test | ./node_modules/.bin/tap-spec",
+    "test-node-raw": "node ./test",
+    "test-browser-local": "zuul --local 9999 --ui tape -- ./test"
+  },
+  "keywords": [
+    "transform_components",
+    "transform_components.js"
+  ],
+  "author": "Nathan Faucett",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "@nathanfaucett/task": "^0.0.7",
+    "gulp-jsbeautifier": "^2.0.3",
+    "gulp-jshint": "^2.0.1",
+    "jshint": "^2.9.3",
+    "tap-spec": "^4.1.0",
+    "tape": "^4.2.0",
+    "zuul": "^3.11.0"
+  },
+  "dependencies": {
+    "@nathanfaucett/scene_graph": "git@github.com:nathanfaucett/js-scene_graph.git",
+    "@nathanfaucett/vec2": "^0.0.2",
+    "@nathanfaucett/vec3": "^0.0.2",
+    "@nathanfaucett/quat": "^0.0.2",
+    "@nathanfaucett/mat2": "^0.0.2",
+    "@nathanfaucett/mat32": "^0.0.2",
+    "@nathanfaucett/mat3": "^0.0.2",
+    "@nathanfaucett/mat4": "^0.0.2"
+  }
+}
