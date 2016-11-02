@@ -127,25 +127,25 @@ Transform3DPrototype.lookAt = function(target, up) {
 
     up = up || lookAt_dup;
 
-    if (target.matrixWorld) {
-        vec3.transformMat4(vec, vec3.set(vec, 0.0, 0.0, 0.0), target.matrixWorld);
+    if (target._matrix) {
+        vec3.transformMat4(vec, vec3.set(vec, 0.0, 0.0, 0.0), target._matrix);
     } else {
         vec3.copy(vec, target);
     }
 
-    mat4.lookAt(mat, this.position, vec, up);
-    quat.fromMat4(this.rotation, mat);
+    mat4.lookAt(mat, this._position, vec, up);
+    quat.fromMat4(this._rotation, mat);
 
     return this;
 };
 
 Transform3DPrototype.localToWorld = function(out, v) {
-    return vec3.transformMat4(out, v, this.matrixWorld);
+    return vec3.transformMat4(out, v, this._matrix);
 };
 
 var worldToLocal_mat = mat4.create();
 Transform3DPrototype.worldToLocal = function(out, v) {
-    return vec3.transformMat4(out, v, mat4.inverse(worldToLocal_mat, this.matrixWorld));
+    return vec3.transformMat4(out, v, mat4.inverse(worldToLocal_mat, this._matrix));
 };
 
 Transform3DPrototype.updateMatrix = function() {
