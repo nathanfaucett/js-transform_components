@@ -30,13 +30,12 @@
     "zuul": "^3.11.0"
   },
   "dependencies": {
+    "@nathanfaucett/mat3": "^0.0.2",
+    "@nathanfaucett/mat32": "^0.0.2",
+    "@nathanfaucett/mat4": "^0.0.2",
+    "@nathanfaucett/quat": "^0.0.2",
     "@nathanfaucett/scene_graph": "git@github.com:nathanfaucett/js-scene_graph.git",
     "@nathanfaucett/vec2": "^0.0.2",
-    "@nathanfaucett/vec3": "^0.0.2",
-    "@nathanfaucett/quat": "^0.0.2",
-    "@nathanfaucett/mat2": "^0.0.2",
-    "@nathanfaucett/mat32": "^0.0.2",
-    "@nathanfaucett/mat3": "^0.0.2",
-    "@nathanfaucett/mat4": "^0.0.2"
+    "@nathanfaucett/vec3": "^0.0.2"
   }
 }

@@ -1,4 +1,5 @@
 var vec3 = require("@nathanfaucett/vec3"),
+    mat3 = require("@nathanfaucett/mat3"),
     mat4 = require("@nathanfaucett/mat4"),
     quat = require("@nathanfaucett/quat"),
     sceneGraph = require("@nathanfaucett/scene_graph"),
