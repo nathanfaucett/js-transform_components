@@ -199,9 +199,6 @@ Transform2DPrototype.updateMatrix = function() {
     return this;
 };
 
-Transform2DPrototype.getLocalMatrix = function() {
-    return this._localMatrix;
-};
 Transform2DPrototype.getMatrix = function() {
     if (this._matrixNeedsUpdate) {
         this.updateMatrix();
@@ -209,9 +206,24 @@ Transform2DPrototype.getMatrix = function() {
     return this._matrix;
 };
 
-var getMatrixWorld_mat4 = mat4.create();
+var getLocalMatrix_mat4 = mat4.create();
+Transform2DPrototype.getLocalMatrix = function() {
+    var tmp = getLocalMatrix_mat4,
+        mw = this._localMatrix;
+
+    tmp[0] = mw[0];
+    tmp[4] = mw[2];
+    tmp[1] = mw[1];
+    tmp[5] = mw[3];
+    tmp[12] = mw[4];
+    tmp[13] = mw[5];
+
+    return tmp;
+};
+
+var getWorldMatrix_mat4 = mat4.create();
 Transform2DPrototype.getWorldMatrix = function() {
-    var tmp = getMatrixWorld_mat4,
+    var tmp = getWorldMatrix_mat4,
         mw = this.getMatrix();
 
     tmp[0] = mw[0];

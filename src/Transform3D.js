@@ -186,14 +186,22 @@ Transform3DPrototype.updateMatrix = function() {
     return this;
 };
 
-Transform3DPrototype.getLocalMatrix = function() {
-    return this._localMatrix;
-};
 Transform3DPrototype.getMatrix = function() {
     if (this._matrixNeedsUpdate) {
         this.updateMatrix();
     }
     return this._matrix;
+};
+
+Transform3DPrototype.getMatrix = function() {
+    if (this._matrixNeedsUpdate) {
+        this.updateMatrix();
+    }
+    return this._matrix;
+};
+
+Transform3DPrototype.getLocalMatrix = function() {
+    return this._localMatrix;
 };
 
 Transform3DPrototype.getWorldMatrix = Transform3DPrototype.getMatrix;
