@@ -124,13 +124,13 @@ Transform2DPrototype.lookAt = function(target) {
     var mat = lookAt_mat,
         vec = lookAt_vec;
 
-    if (target._matrix) {
-        vec2.transformMat4(vec, vec2.set(vec, 0.0, 0.0), target._matrix);
+    if (target.getWorldMatrix) {
+        vec2.transformMat4(vec, vec2.set(vec, 0.0, 0.0), target.getWorldMatrix());
     } else {
         vec2.copy(vec, target);
     }
 
-    mat32.lookAt(mat, this._position, vec);
+    mat32.lookAt(mat, this.getPosition(), vec);
     this._rotation = mat32.getRotation(mat);
 
     return this;

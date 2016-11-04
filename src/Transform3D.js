@@ -127,14 +127,14 @@ Transform3DPrototype.lookAt = function(target, up) {
 
     up = up || lookAt_dup;
 
-    if (target._matrix) {
-        vec3.transformMat4(vec, vec3.set(vec, 0.0, 0.0, 0.0), target._matrix);
+    if (target.getWorldMatrix) {
+        vec3.transformMat4(vec, vec3.set(vec, 0.0, 0.0, 0.0), target.getWorldMatrix());
     } else {
         vec3.copy(vec, target);
     }
 
-    mat4.lookAt(mat, this._position, vec, up);
-    quat.fromMat4(this._rotation, mat);
+    mat4.lookAt(mat, this.getPosition(), vec, up);
+    quat.fromMat4(this.getRotation(), mat);
 
     return this;
 };
