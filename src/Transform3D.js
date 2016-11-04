@@ -134,7 +134,9 @@ Transform3DPrototype.lookAt = function(target, up) {
     }
 
     mat4.lookAt(mat, this.getPosition(), vec, up);
-    quat.fromMat4(this.getRotation(), mat);
+    quat.fromMat4(this._localRotation, mat);
+
+    this._matrixNeedsUpdate = true;
 
     return this;
 };

@@ -131,7 +131,9 @@ Transform2DPrototype.lookAt = function(target) {
     }
 
     mat32.lookAt(mat, this.getPosition(), vec);
-    this._rotation = mat32.getRotation(mat);
+    this._localRotation = mat32.getRotation(mat);
+
+    this._matrixNeedsUpdate = true;
 
     return this;
 };
