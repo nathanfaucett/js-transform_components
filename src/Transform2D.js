@@ -213,6 +213,10 @@ Transform2DPrototype.getLocalMatrix = function() {
     var tmp = getLocalMatrix_mat4,
         mw = this._localMatrix;
 
+    if (this._matrixNeedsUpdate) {
+        this.updateMatrix();
+    }
+
     tmp[0] = mw[0];
     tmp[4] = mw[2];
     tmp[1] = mw[1];

@@ -195,14 +195,10 @@ Transform3DPrototype.getMatrix = function() {
     return this._matrix;
 };
 
-Transform3DPrototype.getMatrix = function() {
+Transform3DPrototype.getLocalMatrix = function() {
     if (this._matrixNeedsUpdate) {
         this.updateMatrix();
     }
-    return this._matrix;
-};
-
-Transform3DPrototype.getLocalMatrix = function() {
     return this._localMatrix;
 };
 
