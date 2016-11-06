@@ -61,6 +61,14 @@ Transform3DPrototype.destructor = function() {
     return this;
 };
 
+Transform3DPrototype.getNeedsUpdate = function() {
+    return this._matrixNeedsUpdate;
+};
+Transform3DPrototype.setNeedsUpdate = function() {
+    this._matrixNeedsUpdate = true;
+    return this;
+};
+
 Transform3DPrototype.setPosition = function(v) {
     vec3.copy(this._localPosition, v);
     this._matrixNeedsUpdate = true;
@@ -135,19 +143,18 @@ Transform3DPrototype.lookAt = function(target, up) {
 
     mat4.lookAt(mat, this.getPosition(), vec, up);
     quat.fromMat4(this._localRotation, mat);
-
     this._matrixNeedsUpdate = true;
 
     return this;
 };
 
 Transform3DPrototype.localToWorld = function(out, v) {
-    return vec3.transformMat4(out, v, this._matrix);
+    return vec3.transformMat4(out, v, this.getMatrix());
 };
 
 var worldToLocal_mat = mat4.create();
 Transform3DPrototype.worldToLocal = function(out, v) {
-    return vec3.transformMat4(out, v, mat4.inverse(worldToLocal_mat, this._matrix));
+    return vec3.transformMat4(out, v, mat4.inverse(worldToLocal_mat, this.getMatrix()));
 };
 
 Transform3DPrototype.updateMatrix = function() {

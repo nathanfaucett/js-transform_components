@@ -61,6 +61,14 @@ Transform2DPrototype.destructor = function() {
     return this;
 };
 
+Transform2DPrototype.getNeedsUpdate = function() {
+    return this._matrixNeedsUpdate;
+};
+Transform2DPrototype.setNeedsUpdate = function() {
+    this._matrixNeedsUpdate = true;
+    return this;
+};
+
 Transform2DPrototype.setPosition = function(v) {
     vec2.copy(this._localPosition, v);
     this._matrixNeedsUpdate = true;
@@ -132,19 +140,18 @@ Transform2DPrototype.lookAt = function(target) {
 
     mat32.lookAt(mat, this.getPosition(), vec);
     this._localRotation = mat32.getRotation(mat);
-
     this._matrixNeedsUpdate = true;
 
     return this;
 };
 
 Transform2DPrototype.localToWorld = function(out, v) {
-    return vec2.transformMat32(out, v, this._matrix);
+    return vec2.transformMat32(out, v, this.getMatrix());
 };
 
 var worldToLocal_mat = mat32.create();
 Transform2DPrototype.worldToLocal = function(out, v) {
-    return vec2.transformMat32(out, v, mat32.inverse(worldToLocal_mat, this._matrix));
+    return vec2.transformMat32(out, v, mat32.inverse(worldToLocal_mat, this.getMatrix()));
 };
 
 function mat32FromMat4(a, b) {
