@@ -166,43 +166,40 @@ function mat32FromMat4(a, b) {
 
 var updateMatrix_parentMatrix = mat32.create();
 Transform2DPrototype.updateMatrix = function() {
-    var matrix, localMatrix, entity, parent, needsUpdated, parentTransform;
+    var matrix = this._matrix,
+        localMatrix = this._localMatrix,
+        entity = this.entity,
+        needsUpdated = false,
+        parent, parentTransform;
 
-    if (this._matrixNeedsUpdate) {
-        this._matrixNeedsUpdate = false;
+    this._matrixNeedsUpdate = false;
 
-        matrix = this._matrix;
-        localMatrix = this._localMatrix;
-        entity = this.entity;
-        needsUpdated = false;
+    mat32.compose(localMatrix, this._localPosition, this._localScale, this._localRotation);
 
-        mat32.compose(localMatrix, this._localPosition, this._localScale, this._localRotation);
-
-        if ((parent = entity && entity.parent)) {
-            if ((parentTransform = parent.getComponent("transform.Transform2D"))) {
-                needsUpdated = true;
-                mat32.mul(matrix, parentTransform.getMatrix(), localMatrix);
-            } else if ((parentTransform = parent.getComponent("transform.Transform3D"))) {
-                needsUpdated = true;
-                mat32.mul(
-                    matrix,
-                    mat32FromMat4(
-                        updateMatrix_parentMatrix,
-                        parentTransform.getMatrix()
-                    ),
-                    localMatrix
-                );
-            }
+    if ((parent = entity && entity.parent)) {
+        if ((parentTransform = parent.getComponent("transform.Transform2D"))) {
+            needsUpdated = true;
+            mat32.mul(matrix, parentTransform.getMatrix(), localMatrix);
+        } else if ((parentTransform = parent.getComponent("transform.Transform3D"))) {
+            needsUpdated = true;
+            mat32.mul(
+                matrix,
+                mat32FromMat4(
+                    updateMatrix_parentMatrix,
+                    parentTransform.getMatrix()
+                ),
+                localMatrix
+            );
         }
+    }
 
-        if (needsUpdated) {
-            this._rotation = mat32.decompose(matrix, this._position, this._scale);
-        } else {
-            mat32.copy(matrix, localMatrix);
-            vec2.copy(this._position, this._localPosition);
-            vec2.copy(this._scale, this._localScale);
-            this._rotation = this._localRotation;
-        }
+    if (needsUpdated) {
+        this._rotation = mat32.decompose(matrix, this._position, this._scale);
+    } else {
+        mat32.copy(matrix, localMatrix);
+        vec2.copy(this._position, this._localPosition);
+        vec2.copy(this._scale, this._localScale);
+        this._rotation = this._localRotation;
     }
 
     return this;

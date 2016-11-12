@@ -158,38 +158,35 @@ Transform3DPrototype.worldToLocal = function(out, v) {
 };
 
 Transform3DPrototype.updateMatrix = function() {
-    var matrix, localMatrix, entity, parent, isUpdated, parentTransform;
+    var matrix = this._matrix,
+        localMatrix = this._localMatrix,
+        entity = this.entity,
+        needsUpdated = false,
+        parent, parentTransform;
 
-    if (this._matrixNeedsUpdate) {
-        this._matrixNeedsUpdate = false;
+    this._matrixNeedsUpdate = false;
 
-        matrix = this._matrix;
-        localMatrix = this._localMatrix;
-        entity = this.entity;
-        isUpdated = false;
+    mat4.compose(localMatrix, this._localPosition, this._localScale, this._localRotation);
 
-        mat4.compose(localMatrix, this._localPosition, this._localScale, this._localRotation);
-
-        if ((parent = entity && entity.parent)) {
-            if (
-                (parentTransform = (
-                    parent.getComponent("transform.Transform3D") ||
-                    parent.getComponent("transform.Transform2D")
-                ))
-            ) {
-                isUpdated = true;
-                mat4.mul(matrix, parentTransform.getWorldMatrix(), localMatrix);
-            }
+    if ((parent = entity && entity.parent)) {
+        if (
+            (parentTransform = (
+                parent.getComponent("transform.Transform3D") ||
+                parent.getComponent("transform.Transform2D")
+            ))
+        ) {
+            needsUpdated = true;
+            mat4.mul(matrix, parentTransform.getWorldMatrix(), localMatrix);
         }
+    }
 
-        if (isUpdated) {
-            mat4.decompose(matrix, this._position, this._scale, this._rotation);
-        } else {
-            mat4.copy(matrix, localMatrix);
-            vec3.copy(this._position, this._localPosition);
-            vec3.copy(this._scale, this._localScale);
-            quat.copy(this._rotation, this._localRotation);
-        }
+    if (needsUpdated) {
+        mat4.decompose(matrix, this._position, this._scale, this._rotation);
+    } else {
+        mat4.copy(matrix, localMatrix);
+        vec3.copy(this._position, this._localPosition);
+        vec3.copy(this._scale, this._localScale);
+        quat.copy(this._rotation, this._localRotation);
     }
 
     return this;
