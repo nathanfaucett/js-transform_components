@@ -154,16 +154,6 @@ Transform2DPrototype.worldToLocal = function(out, v) {
     return vec2.transformMat32(out, v, mat32.inverse(worldToLocal_mat, this.getMatrix()));
 };
 
-function mat32FromMat4(a, b) {
-    a[0] = b[0];
-    a[1] = b[1];
-    a[2] = b[4];
-    a[3] = b[5];
-    a[4] = b[12];
-    a[5] = b[15];
-    return a;
-}
-
 var updateMatrix_parentMatrix = mat32.create();
 Transform2DPrototype.updateMatrix = function() {
     var matrix = this._matrix,
@@ -184,7 +174,7 @@ Transform2DPrototype.updateMatrix = function() {
             needsUpdated = true;
             mat32.mul(
                 matrix,
-                mat32FromMat4(
+                mat32.fromMat4(
                     updateMatrix_parentMatrix,
                     parentTransform.getMatrix()
                 ),
@@ -214,40 +204,18 @@ Transform2DPrototype.getMatrix = function() {
 
 var getLocalMatrix_mat4 = mat4.create();
 Transform2DPrototype.getLocalMatrix = function() {
-    var tmp = mat4.identity(getLocalMatrix_mat4),
-        mw = this._localMatrix;
-
     if (this._matrixNeedsUpdate) {
         this.updateMatrix();
     }
-
-    tmp[0] = mw[0];
-    tmp[1] = mw[1];
-    tmp[4] = mw[2];
-    tmp[5] = mw[3];
-    tmp[12] = mw[4];
-    tmp[13] = mw[5];
-
-    return tmp;
+    return mat4.fromMat32(mat4.identity(getLocalMatrix_mat4), this._localMatrix);
 };
 
 var getWorldMatrix_mat4 = mat4.create();
 Transform2DPrototype.getWorldMatrix = function() {
-    var tmp = mat4.identity(getWorldMatrix_mat4),
-        mw = this.getMatrix();
-
     if (this._matrixNeedsUpdate) {
         this.updateMatrix();
     }
-
-    tmp[0] = mw[0];
-    tmp[1] = mw[1];
-    tmp[4] = mw[2];
-    tmp[5] = mw[3];
-    tmp[12] = mw[4];
-    tmp[13] = mw[5];
-
-    return tmp;
+    return mat4.fromMat32(mat4.identity(getWorldMatrix_mat4), this._matrix);
 };
 
 Transform2DPrototype.calculateModelView = function(viewMatrix, modelView) {
