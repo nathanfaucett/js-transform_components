@@ -44,3 +44,39 @@ tape("Transform3D", function(assert) {
 
     assert.end();
 });
+
+tape("Transform2D parent Transform3D child", function(assert) {
+    var scene = Scene.create(),
+        parentTransform = Transform2D.create(),
+        childTransform = Transform3D.create(),
+        parent = Entity.create().addComponent(parentTransform),
+        child = Entity.create().addComponent(childTransform);
+
+    parent.addChild(child);
+    scene.addEntity(parent);
+
+    parentTransform.translate([1, 1]);
+    childTransform.translate([1, 1, 1]);
+
+    assert.deepEquals(childTransform.getPosition(), [2, 2, 1]);
+
+    assert.end();
+});
+
+tape("Transform3D parent Transform2D child", function(assert) {
+    var scene = Scene.create(),
+        parentTransform = Transform3D.create(),
+        childTransform = Transform2D.create(),
+        parent = Entity.create().addComponent(parentTransform),
+        child = Entity.create().addComponent(childTransform);
+
+    parent.addChild(child);
+    scene.addEntity(parent);
+
+    parentTransform.translate([1, 1, 1]);
+    childTransform.translate([1, 1]);
+
+    assert.deepEquals(childTransform.getPosition(), [2, 2]);
+
+    assert.end();
+});

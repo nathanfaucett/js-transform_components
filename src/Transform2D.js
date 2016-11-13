@@ -156,8 +156,8 @@ Transform2DPrototype.worldToLocal = function(out, v) {
 
 function mat32FromMat4(a, b) {
     a[0] = b[0];
-    a[2] = b[4];
     a[1] = b[1];
+    a[2] = b[4];
     a[3] = b[5];
     a[4] = b[12];
     a[5] = b[15];
@@ -214,7 +214,7 @@ Transform2DPrototype.getMatrix = function() {
 
 var getLocalMatrix_mat4 = mat4.create();
 Transform2DPrototype.getLocalMatrix = function() {
-    var tmp = getLocalMatrix_mat4,
+    var tmp = mat4.identity(getLocalMatrix_mat4),
         mw = this._localMatrix;
 
     if (this._matrixNeedsUpdate) {
@@ -222,8 +222,8 @@ Transform2DPrototype.getLocalMatrix = function() {
     }
 
     tmp[0] = mw[0];
-    tmp[4] = mw[2];
     tmp[1] = mw[1];
+    tmp[4] = mw[2];
     tmp[5] = mw[3];
     tmp[12] = mw[4];
     tmp[13] = mw[5];
@@ -233,12 +233,16 @@ Transform2DPrototype.getLocalMatrix = function() {
 
 var getWorldMatrix_mat4 = mat4.create();
 Transform2DPrototype.getWorldMatrix = function() {
-    var tmp = getWorldMatrix_mat4,
+    var tmp = mat4.identity(getWorldMatrix_mat4),
         mw = this.getMatrix();
 
+    if (this._matrixNeedsUpdate) {
+        this.updateMatrix();
+    }
+
     tmp[0] = mw[0];
-    tmp[4] = mw[2];
     tmp[1] = mw[1];
+    tmp[4] = mw[2];
     tmp[5] = mw[3];
     tmp[12] = mw[4];
     tmp[13] = mw[5];
